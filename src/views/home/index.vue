@@ -5,20 +5,20 @@
         <pane size="70">
           <splitpanes horizontal>
             <pane size="25">
-              <current-user/>
+              <current-user />
             </pane>
             <pane size="75">
-              <favorite/>
+              <favorite />
             </pane>
           </splitpanes>
         </pane>
         <pane size="30">
           <splitpanes horizontal>
             <pane size="58">
-              <schedule/>
+              <schedule />
             </pane>
             <pane size="42">
-              <sys-log/>
+              <sys-log />
             </pane>
           </splitpanes>
         </pane>
