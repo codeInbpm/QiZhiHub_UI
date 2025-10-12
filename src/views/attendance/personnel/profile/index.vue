@@ -1,6 +1,22 @@
 <template>
   <div class="layout-padding">
     <div class="layout-padding-auto layout-padding-view">
+      
+      <!-- 搜索区域 -->
+      <el-row v-show="showSearch" class="ml10">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
+          <el-form-item :label="$t('profile.username')" prop="employeeNo">
+            <el-input v-model="state.queryForm.employeeNo" :placeholder="$t('profile.inputUsernameTip')" clearable @keyup.enter="getDataList" />
+          </el-form-item>
+          <el-form-item :label="$t('profile.name')" prop="enpName">
+            <el-input v-model="state.queryForm.enpName" :placeholder="$t('profile.inputNameTip')" clearable @keyup.enter="getDataList" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
 
       <!-- 操作按钮区域 -->
       <el-row>
@@ -12,7 +28,7 @@
             @click="formDialogRef.openDialog()"
             v-auth="'oa_oaEmployees_add'"
           >
-            新增
+            {{ $t('common.addBtn') }}
           </el-button>
           <el-button 
             plain 
@@ -22,7 +38,7 @@
             @click="excelUploadRef.show()" 
             v-auth="'oa_oaEmployees_add'"
           >
-            导入
+            {{ $t('common.importBtn') }}
           </el-button>
           <el-button 
             plain 
@@ -32,7 +48,7 @@
             v-auth="'oa_oaEmployees_del'" 
             @click="handleDelete(selectObjs)"
           >
-            删除
+            {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar 
             v-model:showSearch="showSearch" 
@@ -56,15 +72,15 @@
         @sort-change="sortChangeHandle"
       >
         <el-table-column type="selection" width="40" align="center" />
-        <el-table-column type="index" label="#" width="40" />
+        <el-table-column type="index" :label="$t('profile.index')" width="40" />
         <el-table-column 
           prop="employeeNo" 
-          label="员工工号" 
+          :label="$t('profile.username')" 
           show-overflow-tooltip
         />
         <el-table-column 
           prop="enpName" 
-          label="姓名" 
+          :label="$t('profile.name')" 
           show-overflow-tooltip
         />
         <el-table-column prop="gender" label="性别（男/女/其他）" show-overflow-tooltip>
@@ -74,12 +90,12 @@
         </el-table-column>
         <el-table-column 
           prop="departmentId" 
-          label="所属部门ID（sys_dept.dept_id）" 
+          :label="$t('profile.deptId')" 
           show-overflow-tooltip
         />
         <el-table-column 
           prop="position" 
-          label="职位" 
+          :label="$t('profile.post')" 
           show-overflow-tooltip
         />
         <el-table-column 
@@ -127,7 +143,7 @@
           label="开户行" 
           show-overflow-tooltip
         />
-        <el-table-column label="操作" width="150">
+        <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button 
               icon="edit-pen" 
@@ -136,7 +152,7 @@
               v-auth="'oa_oaEmployees_edit'"
               @click="formDialogRef.openDialog(scope.row.id)"
             >
-              编辑
+              {{ $t('common.editBtn') }}
             </el-button>
             <el-button 
               icon="delete" 
@@ -145,7 +161,7 @@
               v-auth="'oa_oaEmployees_del'" 
               @click="handleDelete([scope.row.id])"
             >
-              删除
+              {{ $t('common.delBtn') }}
             </el-button>
           </template>
         </el-table-column>
@@ -165,7 +181,7 @@
     <!-- 导入excel弹窗 (需要在 upms-biz/resources/file 下维护模板) -->
     <upload-excel
       ref="excelUploadRef"
-      title="导入"
+      :title="$t('profile.importProfileTip')"
       url="/oa/oaEmployees/import"
       temp-url="/admin/sys-file/local/file/oaEmployees.xlsx"
       @refreshDataList="getDataList"
@@ -179,6 +195,16 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObjs } from "/@/api/oa/oaEmployees";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useDict } from '/@/hooks/dict';
+import { useI18n } from 'vue-i18n';
+
+// 导入i18n语言包
+import zhCn from './i18n/zh-cn';
+import en from './i18n/en';
+
+// 注册i18n语言包
+const { t, mergeLocaleMessage } = useI18n();
+mergeLocaleMessage('zh-cn', zhCn);
+mergeLocaleMessage('en', en);
 
 // ========== 组件声明 ==========
 // 异步加载表单弹窗组件
@@ -254,7 +280,7 @@ const selectionChangHandle = (objs: { id: string }[]) => {
  */
 const handleDelete = async (ids: string[]) => {
   try {
-    await useMessageBox().confirm('此操作将永久删除');
+    await useMessageBox().confirm(t('common.delConfirmText'));
   } catch {
     return;
   }
@@ -262,7 +288,7 @@ const handleDelete = async (ids: string[]) => {
   try {
     await delObjs(ids);
     getDataList();
-    useMessage().success('删除成功');
+    useMessage().success(t('common.delSuccessText'));
   } catch (err: any) {
     useMessage().error(err.msg);
   }
