@@ -1,232 +1,270 @@
 <template>
   <div class="layout-padding">
-    <splitpanes>
-      <pane size="15">
-        <div class="layout-padding-auto layout-padding-view">
-          <el-scrollbar>
-            <query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" :show-expand="true" @node-click="handleNodeClick">
-              <!-- 没有数据权限提示 -->
-              <template #default="{ node, data }">
-                <el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
-									<span
-                  >{{ node.label }}
-										<SvgIcon name="ele-Lock" />
-									</span>
-                </el-tooltip>
-                <span v-if="!data.isLock">{{ node.label }}</span>
-              </template>
-            </query-tree>
-          </el-scrollbar>
-        </div>
-      </pane>
-      <pane class="ml8">
-        <div class="layout-padding-auto layout-padding-view">
-          <el-row v-show="showSearch">
-            <el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
-              <el-form-item :label="$t('sysuser.username')" prop="username">
-                <el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
-              </el-form-item>
-              <el-form-item :label="$t('sysuser.phone')" prop="phone">
-                <el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
-              </el-form-item>
-              <el-form-item>
-                <el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
-                <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-              </el-form-item>
-            </el-form>
-          </el-row>
-          <el-row>
-            <div class="mb8" style="width: 100%">
-              <el-button v-auth="'sys_user_add'" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
-                {{ $t('common.addBtn') }}
-              </el-button>
-              <el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
-                {{ $t('common.importBtn') }}
-              </el-button>
+    <div class="layout-padding-auto layout-padding-view">
 
-              <el-button
-                  plain
-                  v-auth="'sys_user_del'"
-                  :disabled="multiple"
-                  class="ml10"
-                  icon="Delete"
-                  type="primary"
-                  @click="handleDelete(selectObjs)"
-              >
-                {{ $t('common.delBtn') }}
-              </el-button>
-
-              <right-toolbar
-                  v-model:showSearch="showSearch"
-                  :export="'sys_user_export'"
-                  @exportExcel="exportExcel"
-                  @queryTable="getDataList"
-                  class="ml10 mr20"
-                  style="float: right"
-              />
-            </div>
-          </el-row>
-          <el-table
-              v-loading="state.loading"
-              :data="state.dataList"
-              @selection-change="handleSelectionChange"
-              border
-              :cell-style="tableStyle.cellStyle"
-              :header-cell-style="tableStyle.headerCellStyle"
+      <!-- 操作按钮区域 -->
+      <el-row>
+        <div class="mb8" style="width: 100%">
+          <el-button 
+            icon="folder-add" 
+            type="primary" 
+            class="ml10" 
+            @click="formDialogRef.openDialog()"
+            v-auth="'oa_oaEmployees_add'"
           >
-            <el-table-column :selectable="handleSelectable" type="selection" width="40" />
-            <el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
-            <el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
-            <el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
-            <el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
-            <el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
-              <template #default="scope">
-                <el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
-              <template #default="scope">
-                <el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
-              <template #default="scope">
-                <el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)" active-value="0" inactive-value="9"></el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('sysuser.createTime')" prop="createTime" show-overflow-tooltip width="180"></el-table-column>
-            <el-table-column :label="$t('common.action')" width="160" fixed="right">
-              <template #default="scope">
-                <el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
-                  {{ $t('common.editBtn') }}
-                </el-button>
-                <el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
-									<span style="margin-left: 12px">
-										<el-button
-                        icon="delete"
-                        v-auth="'sys_user_del'"
-                        :disabled="scope.row.username === 'admin'"
-                        text
-                        type="primary"
-                        @click="handleDelete([scope.row.userId])"
-                    >{{ $t('common.delBtn') }}
-										</el-button>
-									</span>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-          </el-table>
-          <pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle"> </pagination>
+            新增
+          </el-button>
+          <el-button 
+            plain 
+            icon="upload-filled" 
+            type="primary" 
+            class="ml10" 
+            @click="excelUploadRef.show()" 
+            v-auth="'oa_oaEmployees_add'"
+          >
+            导入
+          </el-button>
+          <el-button 
+            plain 
+            :disabled="multiple" 
+            icon="Delete" 
+            type="primary"
+            v-auth="'oa_oaEmployees_del'" 
+            @click="handleDelete(selectObjs)"
+          >
+            删除
+          </el-button>
+          <right-toolbar 
+            v-model:showSearch="showSearch" 
+            :export="'oa_oaEmployees_export'"
+            @exportExcel="exportExcel" 
+            class="ml10 mr20" 
+            style="float: right;"
+            @queryTable="getDataList"
+          />
         </div>
-      </pane>
-    </splitpanes>
+      </el-row>
 
-    <user-form ref="userDialogRef" @refresh="getDataList(false)" />
+      <!-- 数据表格区域 -->
+      <el-table 
+        :data="state.dataList" 
+        v-loading="state.loading" 
+        border 
+        :cell-style="tableStyle.cellStyle" 
+        :header-cell-style="tableStyle.headerCellStyle"
+        @selection-change="selectionChangHandle"
+        @sort-change="sortChangeHandle"
+      >
+        <el-table-column type="selection" width="40" align="center" />
+        <el-table-column type="index" label="#" width="40" />
+        <el-table-column 
+          prop="employeeNo" 
+          label="员工工号" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="enpName" 
+          label="姓名" 
+          show-overflow-tooltip
+        />
+        <el-table-column prop="gender" label="性别（男/女/其他）" show-overflow-tooltip>
+          <template #default="scope">
+            <dict-tag :options="gender" :value="scope.row.gender" />
+          </template>
+        </el-table-column>
+        <el-table-column 
+          prop="departmentId" 
+          label="所属部门ID（sys_dept.dept_id）" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="position" 
+          label="职位" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="empStatus" 
+          label="人员状态" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="hireType" 
+          label="聘用类型（全职/兼职/远程等）" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="empType" 
+          label="员工类型（正式/合同/实习等）" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="probationEndDate" 
+          label="试用期到" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="regularizationDate" 
+          label="转正日期" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="education" 
+          label="学历" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="maritalStatus" 
+          label="婚姻（已婚/单身/离异等）" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="idCard" 
+          label="身份证号" 
+          show-overflow-tooltip
+        />
+        <el-table-column 
+          prop="bankName" 
+          label="开户行" 
+          show-overflow-tooltip
+        />
+        <el-table-column label="操作" width="150">
+          <template #default="scope">
+            <el-button 
+              icon="edit-pen" 
+              text 
+              type="primary" 
+              v-auth="'oa_oaEmployees_edit'"
+              @click="formDialogRef.openDialog(scope.row.id)"
+            >
+              编辑
+            </el-button>
+            <el-button 
+              icon="delete" 
+              text 
+              type="primary" 
+              v-auth="'oa_oaEmployees_del'" 
+              @click="handleDelete([scope.row.id])"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
+      <!-- 分页组件 -->
+      <pagination 
+        @size-change="sizeChangeHandle" 
+        @current-change="currentChangeHandle" 
+        v-bind="state.pagination" 
+      />
+    </div>
+
+    <!-- 编辑、新增弹窗 -->
+    <form-dialog ref="formDialogRef" @refresh="getDataList(false)" />
+
+    <!-- 导入excel弹窗 (需要在 upms-biz/resources/file 下维护模板) -->
     <upload-excel
-        ref="excelUploadRef"
-        :title="$t('sysuser.importUserTip')"
-        temp-url="/admin/sys-file/local/file/user.xlsx"
-        url="/admin/user/import"
-        @refreshDataList="getDataList"
+      ref="excelUploadRef"
+      title="导入"
+      url="/oa/oaEmployees/import"
+      temp-url="/admin/sys-file/local/file/oaEmployees.xlsx"
+      @refreshDataList="getDataList"
     />
   </div>
 </template>
 
-<script lang="ts" name="systemUser" setup>
-import { delObj, pageList, putObj } from '/@/api/admin/user';
-import { deptTree } from '/@/api/admin/dept';
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useI18n } from 'vue-i18n';
+<script setup lang="ts" name="systemOaEmployees">
+// ========== 导入声明 ==========
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { fetchList, delObjs } from "/@/api/oa/oaEmployees";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useDict } from '/@/hooks/dict';
 
-// 动态引入组件
-const UserForm = defineAsyncComponent(() => import('./form.vue'));
-const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
+// ========== 组件声明 ==========
+// 异步加载表单弹窗组件
+const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
-const { t } = useI18n();
+// ========== 字典数据 ==========
+// 加载字典数据
+const { gender } = useDict('gender');
 
-// 定义变量内容
-const userDialogRef = ref();
-const excelUploadRef = ref();
-const queryRef = ref();
-const showSearch = ref(true);
+// ========== 组件引用 ==========
+const formDialogRef = ref();          // 表单弹窗引用
+const excelUploadRef = ref();         // Excel上传弹窗引用
+const queryRef = ref();               // 查询表单引用
 
-// 多选rows
-const selectObjs = ref([]) as any;
-// 是否可以多选
-const multiple = ref(true);
+// ========== 响应式数据 ==========
+const showSearch = ref(true);         // 是否显示搜索区域
+const selectObjs = ref([]) as any;    // 表格多选数据
+const multiple = ref(true);           // 是否多选
 
-// 定义表格查询、后台调用的API
+// ========== 表格状态 ==========
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {
-    deptId: '',
-    username: '',
-    phone: '',
-  },
-  pageList: pageList,
-});
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
-
-// 部门树使用的数据
-const deptData = reactive({
-  queryList: (name: String) => {
-    return deptTree({
-      deptName: name,
-    });
-  },
+  queryForm: {},    // 查询参数
+  pageList: fetchList // 分页查询方法
 });
 
-// 清空搜索条件
+// ========== Hook引用 ==========
+// 表格相关Hook
+const {
+  getDataList,
+  currentChangeHandle,
+  sizeChangeHandle,
+  sortChangeHandle,
+  downBlobFile,
+  tableStyle
+} = useTable(state);
+
+// ========== 方法定义 ==========
+/**
+ * 重置查询条件
+ */
 const resetQuery = () => {
+  // 清空搜索条件
   queryRef.value?.resetFields();
-  state.queryForm.deptId = '';
+  // 清空多选
+  selectObjs.value = [];
+  // 重新查询
   getDataList();
 };
 
-// 点击树
-const handleNodeClick = (e: any) => {
-  state.queryForm.deptId = e.id;
-  getDataList();
-};
-
-// 导出excel
+/**
+ * 导出Excel文件
+ */
 const exportExcel = () => {
-  downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx');
+  downBlobFile(
+    '/oa/oaEmployees/export',
+    Object.assign(state.queryForm, { ids: selectObjs }),
+    'oaEmployees.xlsx'
+  );
 };
 
-// 是否可以多选
-const handleSelectable = (row: any) => {
-  return row.username !== 'admin';
-};
-
-// 多选事件
-const handleSelectionChange = (objs: { userId: string }[]) => {
-  selectObjs.value = objs.map(({ userId }) => userId);
+/**
+ * 表格多选事件处理
+ * @param objs 选中的数据行
+ */
+const selectionChangHandle = (objs: { id: string }[]) => {
+  selectObjs.value = objs.map(({ id }) => id);
   multiple.value = !objs.length;
 };
 
-// 删除操作
+/**
+ * 删除数据处理
+ * @param ids 要删除的数据ID数组
+ */
 const handleDelete = async (ids: string[]) => {
   try {
-    await useMessageBox().confirm(t('common.delConfirmText'));
+    await useMessageBox().confirm('此操作将永久删除');
   } catch {
     return;
   }
 
   try {
-    await delObj(ids);
+    await delObjs(ids);
     getDataList();
-    useMessage().success(t('common.delSuccessText'));
+    useMessage().success('删除成功');
   } catch (err: any) {
     useMessage().error(err.msg);
   }
-};
-
-//表格内开关 (用户状态)
-const changeSwitch = async (row: object) => {
-  await putObj(row);
-  useMessage().success(t('common.optSuccessText'));
-  getDataList();
 };
 </script>
