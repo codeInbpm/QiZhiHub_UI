@@ -1,7 +1,7 @@
 <template>
   <div class="layout-padding">
     <div class="layout-padding-auto layout-padding-view">
-      
+
       <!-- 搜索区域 -->
       <el-row v-show="showSearch" class="ml10">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
@@ -21,40 +21,40 @@
       <!-- 操作按钮区域 -->
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button 
-            icon="folder-add" 
-            type="primary" 
-            class="ml10" 
+          <el-button
+            icon="folder-add"
+            type="primary"
+            class="ml10"
             @click="formDialogRef.openDialog()"
             v-auth="'oa_oaEmployees_add'"
           >
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button 
-            plain 
-            icon="upload-filled" 
-            type="primary" 
-            class="ml10" 
-            @click="excelUploadRef.show()" 
+          <el-button
+            plain
+            icon="upload-filled"
+            type="primary"
+            class="ml10"
+            @click="excelUploadRef.show()"
             v-auth="'oa_oaEmployees_add'"
           >
             {{ $t('common.importBtn') }}
           </el-button>
-          <el-button 
-            plain 
-            :disabled="multiple" 
-            icon="Delete" 
+          <el-button
+            plain
+            :disabled="multiple"
+            icon="Delete"
             type="primary"
-            v-auth="'oa_oaEmployees_del'" 
+            v-auth="'oa_oaEmployees_del'"
             @click="handleDelete(selectObjs)"
           >
             {{ $t('common.delBtn') }}
           </el-button>
-          <right-toolbar 
-            v-model:showSearch="showSearch" 
+          <right-toolbar
+            v-model:showSearch="showSearch"
             :export="'oa_oaEmployees_export'"
-            @exportExcel="exportExcel" 
-            class="ml10 mr20" 
+            @exportExcel="exportExcel"
+            class="ml10 mr20"
             style="float: right;"
             @queryTable="getDataList"
           />
@@ -62,25 +62,25 @@
       </el-row>
 
       <!-- 数据表格区域 -->
-      <el-table 
-        :data="state.dataList" 
-        v-loading="state.loading" 
-        border 
-        :cell-style="tableStyle.cellStyle" 
+      <el-table
+        :data="state.dataList"
+        v-loading="state.loading"
+        border
+        :cell-style="tableStyle.cellStyle"
         :header-cell-style="tableStyle.headerCellStyle"
         @selection-change="selectionChangHandle"
         @sort-change="sortChangeHandle"
       >
         <el-table-column type="selection" width="40" align="center" />
         <el-table-column type="index" :label="$t('profile.index')" width="40" />
-        <el-table-column 
-          prop="employeeNo" 
-          :label="$t('profile.username')" 
+        <el-table-column
+          prop="employeeNo"
+          :label="$t('profile.username')"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="enpName" 
-          :label="$t('profile.name')" 
+        <el-table-column
+          prop="enpName"
+          :label="$t('profile.name')"
           show-overflow-tooltip
         />
         <el-table-column prop="gender" label="性别（男/女/其他）" show-overflow-tooltip>
@@ -88,77 +88,77 @@
             <dict-tag :options="gender" :value="scope.row.gender" />
           </template>
         </el-table-column>
-        <el-table-column 
-          prop="departmentId" 
-          :label="$t('profile.deptId')" 
+        <el-table-column
+          prop="departmentId"
+          :label="$t('profile.deptId')"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="position" 
-          :label="$t('profile.post')" 
+        <el-table-column
+          prop="position"
+          :label="$t('profile.post')"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="empStatus" 
-          label="人员状态" 
+        <el-table-column
+          prop="empStatus"
+          label="人员状态"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="hireType" 
-          label="聘用类型（全职/兼职/远程等）" 
+        <el-table-column
+          prop="hireType"
+          label="聘用类型（全职/兼职/远程等）"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="empType" 
-          label="员工类型（正式/合同/实习等）" 
+        <el-table-column
+          prop="empType"
+          label="员工类型（正式/合同/实习等）"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="probationEndDate" 
-          label="试用期到" 
+        <el-table-column
+          prop="probationEndDate"
+          label="试用期到"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="regularizationDate" 
-          label="转正日期" 
+        <el-table-column
+          prop="regularizationDate"
+          label="转正日期"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="education" 
-          label="学历" 
+        <el-table-column
+          prop="education"
+          label="学历"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="maritalStatus" 
-          label="婚姻（已婚/单身/离异等）" 
+        <el-table-column
+          prop="maritalStatus"
+          label="婚姻（已婚/单身/离异等）"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="idCard" 
-          label="身份证号" 
+        <el-table-column
+          prop="idCard"
+          label="身份证号"
           show-overflow-tooltip
         />
-        <el-table-column 
-          prop="bankName" 
-          label="开户行" 
+        <el-table-column
+          prop="bankName"
+          label="开户行"
           show-overflow-tooltip
         />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button 
-              icon="edit-pen" 
-              text 
-              type="primary" 
+            <el-button
+              icon="edit-pen"
+              text
+              type="primary"
               v-auth="'oa_oaEmployees_edit'"
               @click="formDialogRef.openDialog(scope.row.id)"
             >
               {{ $t('common.editBtn') }}
             </el-button>
-            <el-button 
-              icon="delete" 
-              text 
-              type="primary" 
-              v-auth="'oa_oaEmployees_del'" 
+            <el-button
+              icon="delete"
+              text
+              type="primary"
+              v-auth="'oa_oaEmployees_del'"
               @click="handleDelete([scope.row.id])"
             >
               {{ $t('common.delBtn') }}
@@ -168,10 +168,10 @@
       </el-table>
 
       <!-- 分页组件 -->
-      <pagination 
-        @size-change="sizeChangeHandle" 
-        @current-change="currentChangeHandle" 
-        v-bind="state.pagination" 
+      <pagination
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+        v-bind="state.pagination"
       />
     </div>
 

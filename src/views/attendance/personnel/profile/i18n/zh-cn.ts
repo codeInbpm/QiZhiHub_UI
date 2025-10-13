@@ -1,7 +1,7 @@
 export default {
 	profile: {
 		index: '#',
-		importProfileTip: '导入人员档案',
+		importProfileTip: '导入人事档案',
 		username: '用户名',
 		name: '姓名',
 		phone: '手机号',
