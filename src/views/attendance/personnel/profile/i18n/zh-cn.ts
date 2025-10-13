@@ -1,0 +1,20 @@
+export default {
+	profile: {
+		index: '#',
+		importProfileTip: '导入人员档案',
+		username: '用户名',
+		name: '姓名',
+		phone: '手机号',
+		post: '岗位',
+		role: '角色',
+		lockFlag: '状态',
+		createTime: '创建时间',
+		deptId: '部门ID',
+		inputUsernameTip: '请输入用户名',
+		inputNameTip: '请输入姓名',
+		inputPhoneTip: '请输入手机号',
+		noDataScopeTip: '无数据权限',
+		deleteDisabledTip: '不能删除管理员',
+		importUserTip: '导入用户',
+	},
+};

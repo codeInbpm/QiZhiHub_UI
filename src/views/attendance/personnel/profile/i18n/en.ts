@@ -1,0 +1,20 @@
+export default {
+	profile: {
+		index: '#',
+		importProfileTip: 'Import Personnel Profile',
+		username: 'Username',
+		name: 'Name',
+		phone: 'Phone',
+		post: 'Post',
+		role: 'Role',
+		lockFlag: 'Status',
+		createTime: 'Create Time',
+		deptId: 'Department ID',
+		inputUsernameTip: 'Please input username',
+		inputNameTip: 'Please input name',
+		inputPhoneTip: 'Please input phone number',
+		noDataScopeTip: 'No data permission',
+		deleteDisabledTip: 'Cannot delete administrator',
+		importUserTip: 'Import User',
+	},
+};
