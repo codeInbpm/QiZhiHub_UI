@@ -89,7 +89,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="departmentId"
+          prop="deptName"
           :label="$t('profile.deptId')"
           show-overflow-tooltip
         />
@@ -103,16 +103,12 @@
           label="人员状态"
           show-overflow-tooltip
         />
-        <el-table-column
-          prop="hireType"
-          label="聘用类型（全职/兼职/远程等）"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          prop="empType"
-          label="员工类型（正式/合同/实习等）"
-          show-overflow-tooltip
-        />
+        <el-table-column prop="empType" label="员工类型" show-overflow-tooltip>
+          <template #default="scope">
+            <dict-tag :options="emp_type" :value="scope.row.empType" />
+          </template>
+        </el-table-column>
+
         <el-table-column
           prop="probationEndDate"
           label="试用期到"
@@ -128,11 +124,11 @@
           label="学历"
           show-overflow-tooltip
         />
-        <el-table-column
-          prop="maritalStatus"
-          label="婚姻（已婚/单身/离异等）"
-          show-overflow-tooltip
-        />
+        <el-table-column prop="maritalStatus" label="婚姻" show-overflow-tooltip>
+          <template #default="scope">
+            <dict-tag :options="marital_status" :value="scope.row.maritalStatus" />
+          </template>
+        </el-table-column>
         <el-table-column
           prop="idCard"
           label="身份证号"
@@ -213,6 +209,8 @@ const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 // ========== 字典数据 ==========
 // 加载字典数据
 const { gender } = useDict('gender');
+const { emp_type } = useDict('emp_type');
+const { marital_status } = useDict('marital_status');
 
 // ========== 组件引用 ==========
 const formDialogRef = ref();          // 表单弹窗引用
