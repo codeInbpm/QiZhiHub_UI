@@ -1,0 +1,30 @@
+export default {
+  contract: {
+    index: '#',
+    importContractTip: '导入员工合同',
+    employeeId: '员工ID',
+    contractNumber: '合同编号',
+    contractName: '合同名称',
+    contractType: '合同类型',
+    startDate: '开始日期',
+    endDate: '截止日期',
+    contractStatus: '合同状态',
+    department: '部门',
+    inputEmployeeIdTip: '请输入员工ID',
+    inputContractNumberTip: '请输入合同编号',
+    inputContractNameTip: '请输入合同名称',
+    deleteConfirmText: '此操作将永久删除该合同，是否继续？',
+    delSuccessText: '删除成功',
+    optSuccessText: '操作成功',
+    // 合同类型选项
+    contractTypeLabor: '劳动合同',
+    contractTypeTrial: '试用合同',
+    contractTypePartTime: '兼职合同',
+    contractTypeOther: '其他合同',
+    // 合同状态选项
+    contractStatusPending: '待生效',
+    contractStatusActive: '有效',
+    contractStatusExpired: '已过期',
+    contractStatusTerminated: '已终止',
+  },
+};

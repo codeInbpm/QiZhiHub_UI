@@ -1,0 +1,30 @@
+export default {
+  contract: {
+    index: '#',
+    importContractTip: 'Import Employee Contracts',
+    employeeId: 'Employee ID',
+    contractNumber: 'Contract Number',
+    contractName: 'Contract Name',
+    contractType: 'Contract Type',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    contractStatus: 'Contract Status',
+    department: 'Department',
+    inputEmployeeIdTip: 'Please enter employee ID',
+    inputContractNumberTip: 'Please enter contract number',
+    inputContractNameTip: 'Please enter contract name',
+    deleteConfirmText: 'This operation will permanently delete the contract. Continue?',
+    delSuccessText: 'Successfully deleted',
+    optSuccessText: 'Operation successful',
+    // Contract type options
+    contractTypeLabor: 'Labor Contract',
+    contractTypeTrial: 'Trial Contract',
+    contractTypePartTime: 'Part-time Contract',
+    contractTypeOther: 'Other Contract',
+    // Contract status options
+    contractStatusPending: 'Pending',
+    contractStatusActive: 'Active',
+    contractStatusExpired: 'Expired',
+    contractStatusTerminated: 'Terminated',
+  },
+};
