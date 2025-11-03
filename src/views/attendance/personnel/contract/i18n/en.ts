@@ -3,6 +3,7 @@ export default {
     index: '#',
     importContractTip: 'Import Employee Contracts',
     employeeId: 'Employee ID',
+    employeeName: 'Employee Name',
     contractNumber: 'Contract Number',
     contractName: 'Contract Name',
     contractType: 'Contract Type',

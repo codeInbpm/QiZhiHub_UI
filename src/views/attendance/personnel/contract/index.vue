@@ -84,8 +84,8 @@
         <el-table-column type="selection" width="40" align="center" />
         <el-table-column type="index" :label="$t('contract.index')" width="40" />
         <el-table-column
-          prop="employeeId"
-          :label="$t('contract.employeeId')"
+          prop="employeeName"
+          :label="$t('contract.employeeName')"
           show-overflow-tooltip
         />
         <el-table-column

@@ -3,6 +3,7 @@ export default {
     index: '#',
     importContractTip: '导入员工合同',
     employeeId: '员工ID',
+    employeeName: '员工姓名',
     contractNumber: '合同编号',
     contractName: '合同名称',
     contractType: '合同类型',
