@@ -3,6 +3,7 @@ export default {
 		index: '#',
 		importProfileTip: 'Import Personnel Profile',
 		username: 'Username',
+		employeeNo: 'employeeNo',
 		name: 'Name',
 		phone: 'Phone',
 		post: 'Post',

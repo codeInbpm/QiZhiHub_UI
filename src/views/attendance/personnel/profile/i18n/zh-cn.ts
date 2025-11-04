@@ -3,6 +3,7 @@ export default {
 		index: '#',
 		importProfileTip: '导入人事档案',
 		username: '用户名',
+		employeeNo: '员工工号',
 		name: '姓名',
 		phone: '手机号',
 		post: '岗位',

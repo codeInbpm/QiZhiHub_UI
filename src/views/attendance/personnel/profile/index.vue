@@ -5,7 +5,7 @@
       <!-- 搜索区域 -->
       <el-row v-show="showSearch" class="ml10">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item :label="$t('profile.username')" prop="employeeNo">
+          <el-form-item :label="$t('profile.employeeNo')" prop="employeeNo">
             <el-input v-model="state.queryForm.employeeNo" :placeholder="$t('profile.inputUsernameTip')" clearable @keyup.enter="getDataList" />
           </el-form-item>
           <el-form-item :label="$t('profile.name')" prop="enpName">
@@ -25,7 +25,7 @@
             icon="folder-add"
             type="primary"
             class="ml10"
-            @click="formDialogRef.openDialog()"
+            @click="addDialogRef.openDialog()"
             v-auth="'oa_oaEmployees_add'"
           >
             {{ $t('common.addBtn') }}
@@ -75,7 +75,7 @@
         <el-table-column type="index" :label="$t('profile.index')" width="40" />
         <el-table-column
           prop="employeeNo"
-          :label="$t('profile.username')"
+          :label="$t('profile.employeeNo')"
           show-overflow-tooltip
         />
         <el-table-column
@@ -83,7 +83,7 @@
           :label="$t('profile.name')"
           show-overflow-tooltip
         />
-        <el-table-column prop="gender" label="性别（男/女/其他）" show-overflow-tooltip>
+        <el-table-column prop="gender" label="性别" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="gender" :value="scope.row.gender" />
           </template>
@@ -98,22 +98,22 @@
           :label="$t('profile.post')"
           show-overflow-tooltip
         />
-        <el-table-column
-          prop="empStatus"
-          label="人员状态"
-          show-overflow-tooltip
-        />
+<!--        <el-table-column-->
+<!--          prop="empStatus"-->
+<!--          label="人员状态"-->
+<!--          show-overflow-tooltip-->
+<!--        />-->
         <el-table-column prop="empType" label="员工类型" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="emp_type" :value="scope.row.empType" />
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="probationEndDate"
-          label="试用期到"
-          show-overflow-tooltip
-        />
+<!--        <el-table-column-->
+<!--          prop="probationEndDate"-->
+<!--          label="试用期到"-->
+<!--          show-overflow-tooltip-->
+<!--        />-->
         <el-table-column
           prop="regularizationDate"
           label="转正日期"
@@ -129,16 +129,16 @@
             <dict-tag :options="marital_status" :value="scope.row.maritalStatus" />
           </template>
         </el-table-column>
-        <el-table-column
-          prop="idCard"
-          label="身份证号"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          prop="bankName"
-          label="开户行"
-          show-overflow-tooltip
-        />
+<!--        <el-table-column-->
+<!--          prop="idCard"-->
+<!--          label="身份证号"-->
+<!--          show-overflow-tooltip-->
+<!--        />-->
+<!--        <el-table-column-->
+<!--          prop="bankName"-->
+<!--          label="开户行"-->
+<!--          show-overflow-tooltip-->
+<!--        />-->
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button
@@ -146,7 +146,7 @@
               text
               type="primary"
               v-auth="'oa_oaEmployees_edit'"
-              @click="formDialogRef.openDialog(scope.row.id)"
+              @click="editDialogRef.openDialog(scope.row.id)"
             >
               {{ $t('common.editBtn') }}
             </el-button>
@@ -172,7 +172,8 @@
     </div>
 
     <!-- 编辑、新增弹窗 -->
-    <form-dialog ref="formDialogRef" @refresh="getDataList(false)" />
+    <add-dialog ref="addDialogRef" @refresh="getDataList(false)" />
+    <edit-dialog ref="editDialogRef" @refresh="getDataList(false)" />
 
     <!-- 导入excel弹窗 (需要在 upms-biz/resources/file 下维护模板) -->
     <upload-excel
@@ -204,7 +205,6 @@ mergeLocaleMessage('en', en);
 
 // ========== 组件声明 ==========
 // 异步加载表单弹窗组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
 // ========== 字典数据 ==========
 // 加载字典数据
@@ -213,14 +213,20 @@ const { emp_type } = useDict('emp_type');
 const { marital_status } = useDict('marital_status');
 
 // ========== 组件引用 ==========
-const formDialogRef = ref();          // 表单弹窗引用
-const excelUploadRef = ref();         // Excel上传弹窗引用
-const queryRef = ref();               // 查询表单引用
+// 异步组件
+const AddDialog = defineAsyncComponent(() => import('./add-form.vue'));
+const EditDialog = defineAsyncComponent(() => import('./edit-form.vue'));
+// Excel上传弹窗引用
+const excelUploadRef = ref();
+// 查询表单引用
+const queryRef = ref();
 
 // ========== 响应式数据 ==========
 const showSearch = ref(true);         // 是否显示搜索区域
 const selectObjs = ref([]) as any;    // 表格多选数据
 const multiple = ref(true);           // 是否多选
+const addDialogRef = ref();
+const editDialogRef = ref();
 
 // ========== 表格状态 ==========
 const state: BasicTableProps = reactive<BasicTableProps>({

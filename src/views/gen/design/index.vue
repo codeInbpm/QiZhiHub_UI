@@ -119,7 +119,7 @@ const exportSfcConfig = async () => {
 			formInfo: JSON.stringify(formJson),
 		});
 		const sfcRes = await useGeneratorVFormSfcApi(data.id);
-		handleBlobFile(sfcRes, 'form.vue');
+		handleBlobFile(sfcRes, 'edit-form.vue');
 	} catch (error: any) {
 		useMessage().error(error.message);
 	}
