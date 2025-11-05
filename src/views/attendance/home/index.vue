@@ -1,63 +1,121 @@
 <template>
   <div class="oa-layout">
     <!-- 固定顶部菜单栏 -->
-    <el-menu
-        :default-active="activeIndex"
-        class="oa-nav-menu"
-        mode="horizontal"
-        @select="handleSelect"
-        router
-    >
-      <el-menu-item index="info">
-        <el-icon><House /></el-icon>
-        <span>信息发布</span>
-      </el-menu-item>
-      <el-menu-item index="file">
-        <el-icon><Document /></el-icon>
-        <span>文件管理</span>
-      </el-menu-item>
-      <el-sub-menu index="approval">
-        <template #title>
-          <el-icon><Edit /></el-icon>
-          <span>审批流程</span>
-        </template>
-        <el-sub-menu index="approval-asset">
-          <template #title>资产管理</template>
-          <el-menu-item index="asset-manage">资产管理</el-menu-item>
+    <div class="navbar-container">
+      <el-menu
+          :default-active="activeIndex"
+          class="oa-nav-menu"
+          mode="horizontal"
+          background-color="#ffffff"
+          text-color="#333333"
+          active-text-color="#165DFF"
+          @select="handleSelect"
+          router
+      >
+        <el-sub-menu index="info">
+          <template #title>
+            <el-icon><House /></el-icon>
+            <span>信息发布</span>
+          </template>
+          <div class="expanded-content">
+            <div class="category">
+              <h3>信息发布</h3>
+              <div class="items">
+                <el-menu-item index="company-news">公司新闻</el-menu-item>
+                <el-menu-item index="industry-dynamics">行业动态</el-menu-item>
+                <el-menu-item index="notification">通知公告</el-menu-item>
+              </div>
+            </div>
+          </div>
         </el-sub-menu>
-        <el-sub-menu index="approval-hr">
-          <template #title>人力</template>
-          <el-menu-item index="leave">请假申请</el-menu-item>
-          <el-menu-item index="onboard">员工入职</el-menu-item>
-          <el-menu-item index="archive">员工档案</el-menu-item>
-          <el-menu-item index="promotion">晋升审批</el-menu-item>
-          <el-menu-item index="dimission">离职审批</el-menu-item>
+        <el-menu-item index="file">
+          <el-icon><Document /></el-icon>
+          <span>文件管理</span>
+        </el-menu-item>
+        <el-sub-menu index="approval">
+          <template #title>
+            <el-icon><Edit /></el-icon>
+            <span>审批流程</span>
+          </template>
+          <div class="expanded-content">
+            <div class="category">
+              <h3>资产管理</h3>
+              <div class="items">
+                <el-menu-item index="asset-manage">资产管理</el-menu-item>
+              </div>
+            </div>
+            <div class="category">
+              <h3>人力</h3>
+              <div class="items">
+                <el-menu-item index="leave">请假申请</el-menu-item>
+                <el-menu-item index="onboard">员工入职</el-menu-item>
+                <el-menu-item index="archive">员工档案</el-menu-item>
+                <el-menu-item index="resignation">员工离职</el-menu-item>
+                <el-menu-item index="overtime">加班登记</el-menu-item>
+                <el-menu-item index="business-trip">出差申请</el-menu-item>
+                <el-menu-item index="duty">值班登记</el-menu-item>
+                <el-menu-item index="training">培训申请</el-menu-item>
+              </div>
+            </div>
+            <div class="category">
+              <h3>财务</h3>
+              <div class="items">
+                <el-menu-item index="reimbursement">报销管理</el-menu-item>
+                <el-menu-item index="payment">付款申请</el-menu-item>
+              </div>
+            </div>
+            <div class="category">
+              <h3>采购管理</h3>
+              <div class="items">
+                <el-menu-item index="supplier">供应商管理</el-menu-item>
+              </div>
+            </div>
+          </div>
         </el-sub-menu>
-      </el-sub-menu>
-      <el-sub-menu index="work">
-        <template #title>
-          <el-icon><View /></el-icon>
-          <span>工作管理</span>
-        </template>
-        <el-menu-item index="leader-schedule">领导工作安排</el-menu-item>
-        <el-menu-item index="personal-schedule">个人工作安排</el-menu-item>
-        <el-menu-item index="team-task">团队任务分配</el-menu-item>
-        <el-menu-item index="progress-report">进度汇报</el-menu-item>
-      </el-sub-menu>
-      <el-sub-menu index="system">
-        <template #title>
-          <el-icon><Setting /></el-icon>
-          <span>系统设置</span>
-        </template>
-        <el-menu-item index="user">用户管理</el-menu-item>
-        <el-menu-item index="role">角色管理</el-menu-item>
-        <el-menu-item index="permission">权限管理</el-menu-item>
-      </el-sub-menu>
-      <el-menu-item index="help">
-        <el-icon></el-icon>
-        <span>帮助</span>
-      </el-menu-item>
-    </el-menu>
+        <el-sub-menu index="work">
+          <template #title>
+            <el-icon><View /></el-icon>
+            <span>工作管理</span>
+          </template>
+          <div class="expanded-content">
+            <div class="category">
+              <h3>工作安排</h3>
+              <div class="items">
+                <el-menu-item index="leader-schedule">领导工作安排</el-menu-item>
+                <el-menu-item index="personal-schedule">个人工作安排</el-menu-item>
+              </div>
+            </div>
+            <div class="category">
+              <h3>任务管理</h3>
+              <div class="items">
+                <el-menu-item index="team-task">团队任务分配</el-menu-item>
+                <el-menu-item index="progress-report">进度汇报</el-menu-item>
+              </div>
+            </div>
+          </div>
+        </el-sub-menu>
+        <el-sub-menu index="system">
+          <template #title>
+            <el-icon><Setting /></el-icon>
+            <span>系统设置</span>
+          </template>
+          <div class="expanded-content">
+            <div class="category">
+              <h3>权限管理</h3>
+              <div class="items">
+                <el-menu-item index="user">用户管理</el-menu-item>
+                <el-menu-item index="role">角色管理</el-menu-item>
+                <el-menu-item index="permission">权限管理</el-menu-item>
+              </div>
+            </div>
+          </div>
+        </el-sub-menu>
+        <el-menu-item index="help">
+          <el-icon></el-icon>
+          <span>帮助</span>
+        </el-menu-item>
+      </el-menu>
+    </div>
 
     <!-- 主体内容 -->
     <div class="oa-main">
@@ -313,17 +371,84 @@ onMounted(() => {
   flex-direction: column;
 }
 
+.navbar-container {
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
 .oa-nav-menu {
-  border-bottom: 1px solid #e4e7ed;
   height: 60px;
   display: flex;
   align-items: center;
+  border-bottom: none;
 }
 
 .oa-nav-menu :deep(.el-menu-item),
 .oa-nav-menu :deep(.el-sub-menu__title) {
   height: 60px;
   line-height: 60px;
+}
+
+/* 通铺式展开菜单样式 */
+.expanded-content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px 20px;
+  min-width: 800px;
+  background-color: #fff;
+}
+
+.category {
+  flex: 1;
+  min-width: 180px;
+  margin: 0 10px 15px;
+}
+
+.category h3 {
+  margin: 0 0 10px;
+  padding: 0 0 8px;
+  font-size: 14px;
+  color: #165DFF;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 子菜单样式优化 */
+:deep(.el-sub-menu__wrapper) {
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 0;
+  background-color: #fff;
+}
+
+/* 菜单项样式 - 子菜单项 */
+.oa-nav-menu :deep(.el-sub-menu .el-menu-item) {
+  height: 36px;
+  line-height: 36px;
+  padding: 0 16px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.oa-nav-menu :deep(.el-sub-menu .el-menu-item:hover) {
+  background-color: #f5f7fa;
+  color: #165DFF;
+}
+
+/* 解决多级菜单的一些样式问题 */
+:deep(.el-menu--popup) {
+  padding: 0;
+}
+
+.oa-nav-menu :deep(.el-menu--horizontal > .el-sub-menu .el-sub-menu__icon-arrow) {
+  margin-left: 6px;
 }
 
 .oa-header {
